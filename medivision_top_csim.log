@@ -1,0 +1,51 @@
+INFO: [SIM 2] *************** CSIM start ***************
+   Compiling ../../../../tb.cpp in debug mode
+   Compiling ../../../../top.cpp in debug mode
+   Generating csim.exe
+
+--- Real Image Tests ---
+
+Image test: C:/Users/arafa/Xilinx_projects/Project/Project/test/resized64/Cyst.png
+Expected class: cyst
+
+  Output probabilities:
+    [0] cyst     : 0.9961  <- expected
+    [1] normal   : 0.0000
+    [2] stone    : 0.0000
+    [3] tumor    : 0.0000
+  => Predicted: cyst (p=0.9961)
+  Classification: [CORRECT]
+Image test: C:/Users/arafa/Xilinx_projects/Project/Project/test/resized64/Normal.png
+Expected class: normal
+
+  Output probabilities:
+    [0] cyst     : 0.0000
+    [1] normal   : 0.9883  <- expected
+    [2] stone    : 0.0039
+    [3] tumor    : 0.0000
+  => Predicted: normal (p=0.9883)
+  Classification: [CORRECT]
+Image test: C:/Users/arafa/Xilinx_projects/Project/Project/test/resized64/Stone.png
+Expected class: stone
+
+  Output probabilities:
+    [0] cyst     : 0.0078
+    [1] normal   : 0.0039
+    [2] stone    : 0.9805  <- expected
+    [3] tumor    : 0.0000
+  => Predicted: stone (p=0.9805)
+  Classification: [CORRECT]
+Image test: C:/Users/arafa/Xilinx_projects/Project/Project/test/resized64/Tumor.png
+Expected class: tumor
+
+  Output probabilities:
+    [0] cyst     : 0.0000
+    [1] normal   : 0.0000
+    [2] stone    : 0.0000
+    [3] tumor    : 0.9961  <- expected
+  => Predicted: tumor (p=0.9961)
+  Classification: [CORRECT]
+
+=== Testbench complete: 0 failure(s) ===
+INFO: [SIM 1] CSim done with 0 errors.
+INFO: [SIM 3] *************** CSIM finish ***************
