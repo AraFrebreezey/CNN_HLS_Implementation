@@ -72,9 +72,9 @@ static int load_image_to_input(const char* filepath, neuron_act_t img[IMG_H][IMG
             unsigned char g = raw[base + 1];
             unsigned char b = raw[base + 2];
  
-            img[h][w][0] = ((float)b / 255.0f); 
-            img[h][w][1] = ((float)g / 255.0f);  
-            img[h][w][2] = ((float)r / 255.0f); 
+            img[h][w][0] = ((float) b / 255.0f); 
+            img[h][w][1] = ((float) g / 255.0f);  
+            img[h][w][2] = ((float) r / 255.0f); 
         }
     }
  

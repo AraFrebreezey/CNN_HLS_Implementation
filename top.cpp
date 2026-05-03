@@ -58,12 +58,12 @@ static float tanh_f(float x)
 // -----------------------------------------------------------------------
 // conv1_layer
 // -----------------------------------------------------------------------
-static void conv1_layer(neuron_act_t input_fm [IMG_H][IMG_W][IMG_C], neuron_act_t output_fm[CONV1_OUTPUT_H][CONV1_OUTPUT_W][CONV1_NUM_FILTERS])
+static void conv1_layer(neuron_act_t input_fm[IMG_H][IMG_W][IMG_C], neuron_act_t output_fm[CONV1_OUTPUT_H][CONV1_OUTPUT_W][CONV1_NUM_FILTERS])
 {
     #pragma HLS INLINE off
     CONV1_OH_LOOP: for (int oh = 0; oh < CONV1_OUTPUT_H; oh++) 
     {
-        #pragma HLS PIPELINE II=1
+        
         CONV1_OW_LOOP: for (int ow = 0; ow < CONV1_OUTPUT_W; ow++) 
         {
             CONV1_F_LOOP: for (int f = 0; f < CONV1_NUM_FILTERS; f++) 
@@ -75,6 +75,7 @@ static void conv1_layer(neuron_act_t input_fm [IMG_H][IMG_W][IMG_C], neuron_act_
                     {
                         CONV1_IC_LOOP: for (int ic = 0; ic < IMG_C; ic++) 
                         {
+                            #pragma HLS PIPELINE II=1
                             acc += (accum_t) input_fm[oh+kh][ow+kw][ic] * (accum_t) conv1_w[f][ic][kh][kw];
                         }
                     }
@@ -118,7 +119,7 @@ static void conv2_layer(neuron_act_t input_fm[POOL1_OUTPUT_H][POOL1_OUTPUT_W][CO
     #pragma HLS INLINE off
     CONV2_OUTPUT_H_LOOP: for (int oh = 0; oh < CONV2_OUTPUT_H; oh++) 
     {
-        #pragma HLS PIPELINE II=1
+        
         CONV2_OUTPUT_W_LOOP: for (int ow = 0; ow < CONV2_OUTPUT_W; ow++) 
         {
             CONV2_F_LOOP: for (int f = 0; f < CONV2_NUM_FILTERS; f++) 
@@ -130,6 +131,7 @@ static void conv2_layer(neuron_act_t input_fm[POOL1_OUTPUT_H][POOL1_OUTPUT_W][CO
                     {
                         CONV2_IC_LOOP: for (int ic = 0; ic < CONV1_NUM_FILTERS; ic++) 
                         {
+                            #pragma HLS PIPELINE II=3
                             acc += (accum_t) input_fm[oh+kh][ow+kw][ic] * (accum_t) conv2_w[f][ic][kh][kw];
                         }
                     }
@@ -179,7 +181,7 @@ static void flatten_layer(neuron_act_t input_fm[POOL2_OUTPUT_H][POOL2_OUTPUT_W][
         {
             FLAT_C: for (int c = 0; c < CONV2_NUM_FILTERS; c++) 
             {
-                #pragma HLS PIPELINE II=1
+                #pragma HLS PIPELINE II=2
                 flat[i++] = (float)input_fm[h][w][c];
             }
         }
@@ -212,7 +214,7 @@ static void lstm_layer(float flat_input[FLAT_SIZE], float h_prev[LSTM_UNITS], fl
 
     LSTM_WX_LOOP: for (int i = 0; i < FLAT_SIZE; i++) 
     {
-        #pragma HLS PIPELINE II=1
+        #pragma HLS PIPELINE II=6
         float xi = flat_input[i];
         LSTM_WX_U: for (int u = 0; u < LSTM_UNITS; u++) 
         {
@@ -227,7 +229,7 @@ static void lstm_layer(float flat_input[FLAT_SIZE], float h_prev[LSTM_UNITS], fl
 
     LSTM_UH_LOOP: for (int k = 0; k < LSTM_UNITS; k++) 
     {
-        #pragma HLS PIPELINE II=1
+        #pragma HLS PIPELINE II=6
         float hk = h_prev[k];
         LSTM_UH_U: for (int u = 0; u < LSTM_UNITS; u++) 
         {
@@ -272,7 +274,7 @@ static void attention_layer(float h_in[LSTM_UNITS], float combined[LSTM_UNITS])
 
     ATT_SCORE_LOOP: for (int v = 0; v < LSTM_UNITS; v++) 
     {
-        #pragma HLS PIPELINE II=1
+        #pragma HLS PIPELINE II=6
         float hv = h_in[v];
         ATT_SCORE_U: for (int u = 0; u < LSTM_UNITS; u++) 
         {
